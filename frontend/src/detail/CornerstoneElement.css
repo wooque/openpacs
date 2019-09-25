@@ -1,0 +1,22 @@
+.viewportElement {
+    max-height: 80%;
+    margin: 20px;
+    position: relative;
+    color: white;
+}
+
+@media only screen and (max-width: 420px) {
+    .viewportElement {
+        min-width: 350px;
+        min-height: 350px;
+        max-height: 350px;
+        max-height: 350px;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .viewportElement {
+        min-width: 700px;
+        min-height: 700px;
+    }
+}

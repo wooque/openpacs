@@ -1,0 +1,85 @@
+#!/bin/bash
+set -e
+
+if [ -z $1 ]
+then
+    echo "Command needed (run, db)"
+    exit
+fi
+
+DBNAME="openpacs"
+DBUSER="openpacs"
+
+postgres_psql () {
+    sudo -u postgres psql -h localhost -c "$1"
+}
+
+create_exts () {
+    sudo -u postgres psql -h localhost $1 -c "CREATE EXTENSION intarray"
+    sudo -u postgres psql -h localhost $1 -c "CREATE EXTENSION citext"
+}
+
+create_db () {
+    postgres_psql "CREATE DATABASE $1"
+    postgres_psql "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO $DBUSER"
+    postgres_psql "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO $DBUSER"
+    create_exts $1
+}
+
+drop_db () {
+    postgres_psql "DROP DATABASE IF EXISTS $1"
+}
+
+handle_db () {
+    if [ -z $1 ]
+    then
+        echo "Command needed (create, init, import, start, stop, shell)"
+        exit
+    fi
+
+    case $1 in
+        init)
+            DBPASS=$(openssl rand -base64 15)
+            echo "db_pass: $DBPASS"
+            postgres_psql "CREATE USER $DBUSER WITH PASSWORD '$DBPASS'"
+
+            create_db $DBNAME
+            ;;
+        create)
+            create_db $DBNAME
+            ;;
+        drop)
+            drop_db $DBNAME
+            ;;
+        reset)
+            drop_db $DBNAME
+            create_db $DBNAME
+            ;;
+        shell)
+            psql -h localhost $DBNAME -U $DBUSER
+            ;;
+        import)
+            psql -h localhost $DBNAME -U $DBUSER < dump.sql
+            ;;
+        *)
+            echo "Invalid command"
+            ;;
+    esac
+}
+
+case $1 in
+    run)
+        venv/bin/python app.py
+        ;;
+    db)
+        handle_db "${@:2}"
+        ;;
+    *)
+        cmd="./cmd/$1.py"
+        if [ ! -f $cmd ]; then
+            echo "Unsupported command $1"
+        else
+            python $cmd "${@:2}"
+        fi
+        ;;
+esac

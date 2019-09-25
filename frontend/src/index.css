@@ -1,0 +1,44 @@
+input {
+    margin: 2px;
+}
+button, input[type=submit] {
+    border: 0;
+    background: #d3d3d3;
+    margin: 2px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    outline: none;
+}
+button:hover {
+    background: #c5c5c5;
+}
+input[type=submit]:hover {
+    background: #c5c5c5;
+}
+span {
+    margin: 2px;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    margin-top: 10px;
+}
+a {
+    text-decoration: none;
+}
+a:link {
+    color: #000000;
+}
+a:visited {
+    color: #000000;
+}
+.material-icons.md-18 {
+    font-size: 18px;
+}
+.material-icons.md-14 {
+    font-size: 14px;
+}

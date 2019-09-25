@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  postgres:
+    image: postgres:11.4-alpine
+    network_mode: host
+    environment:
+      POSTGRES_PASSWORD: p05tgr35
+    volumes:
+      - ./db:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: elasticsearch:7.3.0
+    network_mode: host
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+    volumes:
+      - ./es:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  openpacs:
+    image: wooque/openpacs:latest
+    network_mode: host
+    environment:
+      DB_USER: postgres
+      DB_PASS: p05tgr35
+    volumes:
+      - ./storage:/data/files

@@ -1,0 +1,13 @@
+.idea
+.vscode
+/data
+/es
+/db
+/storage
+__pycache__
+/backend/venv
+/backend/static
+/backend/config.local.yaml
+/frontend/node_modules
+/frontend/build
+SCRATCH

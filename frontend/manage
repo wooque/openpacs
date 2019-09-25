@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+if [ -z $1 ]
+then
+    echo 'Command needed (build, build_prod, clean, run, serve, deploy)'
+    exit
+fi
+
+case $1 in
+    build)
+        npm run build
+        ;;
+    clean)
+        rm -rf build
+        ;;
+    run)
+        npm start
+        ;;
+    serve)
+        serve build 3000
+        ;;
+    *)
+        echo 'Unsupported command'
+        ;;
+esac
